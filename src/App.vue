@@ -198,6 +198,7 @@ export default {
   },
 
   data: () => ({
+    form : "",
     key : "",
     UID:"",
     firstName: "",
@@ -222,7 +223,13 @@ export default {
   watch: {
     email(value){
       this.email = value;
-      this.validateEmail(value);
+      if(value == ""){
+        this.msg['email'] = '';
+      }
+      else{
+        this.validateEmail(value);
+      }
+
     },
 
     phoneNo(valuePhone){
@@ -232,24 +239,38 @@ export default {
   },
 
   methods: {
+    clearForm() {
+      this.firstName = "";
+      this.lastName = "";
+      this.DOB = "";
+      this.email = "";
+      this.gender = "";
+      this.phoneNo = "";
+      this.checkedValues = [];
+    },
     validatePhoneNo(valuePhone){
-        if(valuePhone.length != 10){
-          this.msg['phoneNo'] = 'Invalid PhoneNo';
+        if(valuePhone.length == 0){
+          this.msg['phoneNo'] = '';
         }
         else{
-          this.msg['phoneNo'] = '';
+          if(valuePhone.length != 10){
+            this.msg['phoneNo'] = 'Invalid Phone No';
+          }
+          else{
+            this.msg['phoneNo'] = '';
+          }
         }
     },
     validateEmail(value){
-      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value))
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value))
       {
-        this.msg['email'] = '';
-      } else{
         this.msg['email'] = 'Invalid Email Address';
+      } else{
+        this.msg['email'] = '';
       }
     },
 
-    addRecord() {
+    addRecord(event) {
 
       const allRecords = this.allRecords;
       const formEmail = this.email;
@@ -270,7 +291,7 @@ export default {
                   gender: this.gender ,
                   phoneNo: this.phoneNo ,
                   checkedValues: this.checkedValues });
-                this.clearForm();
+                  this.clearForm();
               }
               else {
                 this.msg['email'] = 'Invalid Email Address';
@@ -354,15 +375,6 @@ export default {
       }
     }
 
-    },
-    clearForm() {
-      this.firstName = "";
-      this.lastName = "";
-      this.DOB = "";
-      this.email = "";
-      this.gender = "";
-      this.phoneNo = "";
-      this.checkedValues = "";
     },
 };
 
